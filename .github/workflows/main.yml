@@ -1,0 +1,16 @@
+name: Build
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: pip install buildozer
+      - run: buildozer init
+      - run: sed -i 's/requirements = python3,kivy/requirements = python3,kivy,yt-dlp,Pillow/' buildozer.spec
+      - run: yes | buildozer android release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: myapp
+          path: bin/*.aab
