@@ -7,23 +7,21 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    # ↑ CHANGE THIS from ubuntu-20.04 to ubuntu-latest
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.9'
       
-      - name: Install Cython and buildozer
+      - name: Install buildozer
         run: |
           pip install --upgrade pip
           pip install cython buildozer
       
-      - name: Install system dependencies
+      - name: Install system deps
         run: |
           sudo apt update
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
@@ -33,11 +31,9 @@ jobs:
           buildozer init
           sed -i 's/requirements = python3,kivy/requirements = python3,kivy,yt-dlp,Pillow/' buildozer.spec
           sed -i 's/android.api = 30/android.api = 31/' buildozer.spec
-          sed -i 's/# android.permissions = None/android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE/' buildozer.spec
           yes | buildozer android debug
       
-      - name: Upload APK
-        uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: SocialMediaDownloader
           path: bin/*.apk
