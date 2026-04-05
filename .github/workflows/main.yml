@@ -21,13 +21,14 @@ jobs:
           sudo apt update
           sudo apt install -y git zip unzip openjdk-11-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev cmake libffi-dev libssl-dev
           pip install --upgrade pip
-          pip install cython buildozer
+          pip install cython==0.29.37 buildozer
       
       - name: Build APK
         run: |
           buildozer init
-          sed -i 's/requirements = python3,kivy/requirements = python3,kivy/' buildozer.spec
+          sed -i 's/requirements = python3,kivy/requirements = python3,kivy,cython==0.29.37,pyjnius==1.5.0/' buildozer.spec
           sed -i 's/log_level = 1/log_level = 2/' buildozer.spec
+          sed -i 's/# android.accept_sdk_license = False/android.accept_sdk_license = True/' buildozer.spec
           yes | buildozer android debug
       
       - uses: actions/upload-artifact@v4
