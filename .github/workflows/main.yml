@@ -26,9 +26,8 @@ jobs:
       - name: Build APK
         run: |
           buildozer init
-          sed -i 's/requirements = python3,kivy/requirements = python3,kivy==2.2.0,yt-dlp==2024.12.13,android,pyjnius,requests,Pillow/' buildozer.spec
-          sed -i 's/android.api = 30/android.api = 31/' buildozer.spec
-          sed -i 's/# android.permissions = None/android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE/' buildozer.spec
+          sed -i 's/requirements = python3,kivy/requirements = python3,kivy/' buildozer.spec
+          sed -i 's/log_level = 1/log_level = 2/' buildozer.spec
           yes | buildozer android debug
       
       - uses: actions/upload-artifact@v4
